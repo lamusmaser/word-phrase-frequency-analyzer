@@ -168,7 +168,9 @@ def main():
         analyzer.save_output(
             f"/app/output/word_frequency_analysis_{orig_file}.txt"
         )
-        print(f"Finished processing {in_file} and saved to word_frequency_analysis_{orig_file}.txt} in output location.")
+        print(
+            f"Finished processing {in_file} and saved to word_frequency_analysis_{orig_file}.txt in output location."
+        )
 
 
 if __name__ == "__main__":
