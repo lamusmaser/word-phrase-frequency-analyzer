@@ -163,7 +163,7 @@ def main():
 
         # Print the output
         # analyzer.print_output()
-        orig_file = os.path.basename(in_file)
+        orig_file = os.path.splitext(in_file)[0]
         # Save the output to a file
         analyzer.save_output(
             f"/app/output/word_frequency_analysis_{orig_file}.txt"
