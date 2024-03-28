@@ -146,7 +146,6 @@ class WordAnalyzer:
 def main():
     # Read input text from a file
     os.chdir("/app/input")
-    count = 0
     for in_file in os.listdir("."):
         if in_file == "exclusions.txt":
             continue
@@ -169,7 +168,6 @@ def main():
         analyzer.save_output(
             f"/app/output/word_frequency_analysis_{in_file}.txt"
         )
-        count += 1
 
 
 if __name__ == "__main__":
