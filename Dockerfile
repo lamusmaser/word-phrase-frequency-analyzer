@@ -7,4 +7,4 @@ RUN apt-get -y update
 RUN apt-get -y upgrade
 RUN pip3 install -r requirements.txt
 COPY . .
-CMD [ "python3", "show_stream_reviewer.py"]
+CMD [ "python3", "word_phrase_frequency_analyzer.py"]
