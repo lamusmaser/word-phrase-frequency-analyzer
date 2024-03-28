@@ -1,4 +1,5 @@
 import itertools
+import os
 from collections import defaultdict
 
 
@@ -11,9 +12,12 @@ class WordAnalyzer:
         self.excluded_words = set()
 
     def load_exclusions(self, filename):
-        with open(filename, "r") as file:
-            for line in file:
-                self.excluded_words.add(line.strip())
+        try:
+            with open(filename, "r") as file:
+                for line in file:
+                    self.excluded_words.add(line.strip())
+        except:
+            print("Exclusion file not found. Skipping excluded words.")
 
     def process_text(self, text):
         word_units = self.generate_word_units(text)
@@ -141,23 +145,31 @@ class WordAnalyzer:
 
 def main():
     # Read input text from a file
-    with open("input.txt", "r") as file:
-        text = file.read()
+    os.chdir("/app/input")
+    count = 0
+    for in_file in os.listdir("."):
+        if in_file == "exclusions.txt":
+            break
+        with open(in_file, "r") as file:
+            text = file.read()
 
-    # Initialize the analyzer
-    analyzer = WordAnalyzer()
+        # Initialize the analyzer
+        analyzer = WordAnalyzer()
 
-    # Load excluded words from file
-    analyzer.load_exclusions("exclusions.txt")
+        # Load excluded words from file
+        analyzer.load_exclusions("exclusions.txt")
 
-    # Process the text
-    analyzer.process_text(text)
+        # Process the text
+        analyzer.process_text(text)
 
-    # Print the output
-    # analyzer.print_output()
+        # Print the output
+        # analyzer.print_output()
 
-    # Save the output to a file
-    analyzer.save_output("word_frequency_analysis.txt")
+        # Save the output to a file
+        analyzer.save_output(
+            f"/app/output/word_frequency_analysis_{count}.txt"
+        )
+        count += 1
 
 
 if __name__ == "__main__":
