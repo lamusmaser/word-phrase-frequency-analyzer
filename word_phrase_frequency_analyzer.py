@@ -1,6 +1,9 @@
 import itertools
-import os
 from collections import defaultdict
+
+import nltk
+from nltk.corpus import wordnet
+from nltk.stem import WordNetLemmatizer
 
 
 class WordAnalyzer:
@@ -10,23 +13,26 @@ class WordAnalyzer:
         self.two_word_sets = defaultdict(int)
         self.single_word_counts = defaultdict(int)
         self.excluded_words = set()
+        self.lemmatizer = WordNetLemmatizer()
+        nltk.download("averaged_perceptron_tagger")
+        nltk.download("wordnet")
 
     def load_exclusions(self, filename):
-        try:
-            with open(filename, "r") as file:
-                for line in file:
-                    self.excluded_words.add(line.strip())
-        except:
-            print("Exclusion file not found. Skipping excluded words.")
+        with open(filename, "r") as file:
+            for line in file:
+                self.excluded_words.add(line.strip())
 
     def process_text(self, text):
         word_units = self.generate_word_units(text)
         cleaned_words = self.clean_words(word_units)
         cleaned_words = [word.lower() for word in cleaned_words]
+        lemmatized_words = [
+            self.lemmatize_word(word) for word in cleaned_words
+        ]
 
         # Analyze four-word sets
-        for i in range(len(cleaned_words) - 3):
-            four_word_set = cleaned_words[i : i + 4]
+        for i in range(len(lemmatized_words) - 3):
+            four_word_set = lemmatized_words[i : i + 4]
             if not any(word in self.excluded_words for word in four_word_set):
                 three_word_combinations = itertools.combinations(
                     four_word_set, 3
@@ -73,6 +79,16 @@ class WordAnalyzer:
                 unit = unit[:-1]
             cleaned_words.append(unit)
         return cleaned_words
+
+    def lemmatize_word(self, word):
+        tag = nltk.pos_tag([word])[0][1][0].upper()
+        tag_dict = {
+            "J": wordnet.ADJ,
+            "N": wordnet.NOUN,
+            "V": wordnet.VERB,
+            "R": wordnet.ADV,
+        }
+        return self.lemmatizer.lemmatize(word, tag_dict.get(tag, wordnet.NOUN))
 
     def should_exclude(self, word):
         return word.lower() in self.excluded_words
