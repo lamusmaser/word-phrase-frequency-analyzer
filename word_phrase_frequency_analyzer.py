@@ -167,7 +167,7 @@ def main():
 
         # Save the output to a file
         analyzer.save_output(
-            f"/app/output/word_frequency_analysis_{count}.txt"
+            f"/app/output/word_frequency_analysis_{in_file}.txt"
         )
         count += 1
 
