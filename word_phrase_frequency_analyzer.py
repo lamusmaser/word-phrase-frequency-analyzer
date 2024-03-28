@@ -149,7 +149,7 @@ def main():
     count = 0
     for in_file in os.listdir("."):
         if in_file == "exclusions.txt":
-            break
+            continue
         with open(in_file, "r") as file:
             text = file.read()
 
@@ -157,7 +157,7 @@ def main():
         analyzer = WordAnalyzer()
 
         # Load excluded words from file
-        analyzer.load_exclusions("exclusions.txt")
+        analyzer.load_exclusions("/app/input/exclusions.txt")
 
         # Process the text
         analyzer.process_text(text)
